@@ -57,7 +57,8 @@ button,select,input{font:inherit;color:inherit}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(235px,1fr));gap:16px}
 .pc{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
 .ph{position:relative}
-.ph svg{display:block;width:100%;height:auto}
+/* Фото товару: обрізається до пропорції 240:170 (рекомендовано 1200×850 px) */
+.ph img{display:block;width:100%;aspect-ratio:240/170;object-fit:cover;background:var(--line)}
 .hit{position:absolute;left:8px;top:8px;background:#F29A1F;color:#2A1F26;font-weight:800;font-size:.8rem;padding:2px 10px;border-radius:6px}
 .pb{padding:14px;display:flex;flex-direction:column;gap:8px;flex:1}
 .pb h3{font-size:1.05rem}
@@ -92,7 +93,7 @@ section.info{padding:48px 0 24px}
 .info p{max-width:64ch}
 .two{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin:20px 0}
 figure{margin:0}
-figure svg{display:block;width:100%;height:auto;border-radius:14px}
+figure img{display:block;width:100%;height:auto;border-radius:14px}
 figcaption{color:var(--muted);font-size:.92rem;margin-top:6px}
 .ct{background:var(--brand);color:var(--brand-ink);border-radius:16px;padding:28px 22px;margin-top:28px}
 .ct a{color:var(--brand-ink);font-weight:700}
@@ -129,11 +130,13 @@ footer{padding:24px 0;text-align:center;color:var(--muted);font-size:.92rem}
     <p>Вирощуємо озимий часник на Черкащині, викопуємо вручну та сушимо в тіні. Перед відправкою перебираємо кожну партію. Склад розрахований умовно на 5 тонн.</p>
     <div class="two">
       <figure>
-        <svg viewBox="0 0 600 240" role="img" aria-label="Поле з часником"><defs><symbol id="pl" viewBox="0 0 20 40"><path d="M10 40V14" stroke="#4F8A2B" stroke-width="2"/><path d="M10 30C2 26 1 16 3 8 8 14 10 22 10 30zM10 26C18 22 19 12 17 4 12 10 10 18 10 26z" fill="#5FA032"/></symbol><pattern id="r1" width="22" height="22" patternUnits="userSpaceOnUse"><use href="#pl" x="3" width="16" height="22"/></pattern><pattern id="r2" width="34" height="38" patternUnits="userSpaceOnUse"><use href="#pl" x="5" width="24" height="36"/></pattern><pattern id="r3" width="52" height="60" patternUnits="userSpaceOnUse"><use href="#pl" x="8" width="36" height="58"/></pattern></defs><rect width="600" height="240" fill="#CDE5F1"/><circle cx="500" cy="48" r="26" fill="#FFE08A"/><path d="M0 112C100 88 200 100 300 92S520 84 600 100V130H0z" fill="#8FB07A"/><rect y="110" width="600" height="130" fill="#6B4A33"/><rect y="112" width="600" height="28" fill="url(#r1)"/><rect y="142" width="600" height="44" fill="url(#r2)"/><rect y="188" width="600" height="52" fill="url(#r3)"/></svg>
+        <!-- Картинка: папка images, файл pole.svg (можна замінити на pole.jpg і змінити назву тут) -->
+        <img src="images/pole.svg" alt="Поле з часником" width="600" height="240" loading="lazy">
         <figcaption>Наше поле з озимим часником.</figcaption>
       </figure>
       <figure>
-        <svg viewBox="0 0 600 260" role="img" aria-label="Склад зі скриньками часнику"><defs><pattern id="cr" width="44" height="34" patternUnits="userSpaceOnUse"><rect x="2" y="2" width="40" height="30" rx="2" fill="#C99A5B" stroke="#8A6535" stroke-width="2"/><path d="M2 12h40M2 22h40" stroke="#8A6535" stroke-width="1.5"/></pattern></defs><rect width="600" height="260" fill="#DCD5C8"/><path d="M30 84L300 22L570 84z" fill="#5A4A44"/><rect x="50" y="84" width="500" height="154" fill="#B8A98F"/><rect x="80" y="110" width="460" height="128" fill="#2F241E"/><rect x="88" y="136" width="132" height="102" fill="url(#cr)"/><rect x="264" y="136" width="132" height="102" fill="url(#cr)"/><rect x="440" y="170" width="88" height="68" fill="url(#cr)"/><rect x="40" y="238" width="520" height="10" fill="#8C8070"/></svg>
+        <!-- Картинка: папка images, файл sklad.svg -->
+        <img src="images/sklad.svg" alt="Склад зі скриньками часнику" width="600" height="260" loading="lazy">
         <figcaption>Склад, умовно на 5 тонн часнику.</figcaption>
       </figure>
     </div>
@@ -168,30 +171,24 @@ footer{padding:24px 0;text-align:center;color:var(--muted);font-size:.92rem}
 /* Нік Telegram для замовлень (без @) */
 const TG='ids_game';
 
+/* Папка з картинками (лежить поруч з index.html) */
+const IMG='images/';
+
 /* Товари: змінюйте назви, ціни та описи тут.
+   img: файл картинки товару в папці images (щоб замінити на фото, завантажте
+        фото в папку images і впишіть його назву, наприклад img:'lyubasha.jpg')
    p: ціна за кг або за штуку, u: одиниця, s: варіанти ваги (від 1 кг) */
 const P=[
- {id:1,n:'Часник «Любаша», головки',c:'heads',t:'head',p:150,u:'кг',s:[1,5],hit:1,d:'Великий озимий часник для кухні та зберігання.'},
- {id:2,n:'Часник «Софіївський», головки',c:'heads',t:'head',p:140,u:'кг',s:[1,5],d:'Гострий смак, щільні головки, добре зберігається.'},
- {id:3,n:'Часник «Прометей», зубки на посадку',c:'cloves',t:'cloves',p:180,u:'кг',s:[1,5],hit:1,d:'Відбірні зубки одного розміру. Садять восени.'},
- {id:4,n:'Часник «Любаша», зубки на посадку',c:'cloves',t:'cloves',p:190,u:'кг',s:[1,5],d:'Великі зубки з нашого поля.'},
- {id:5,n:'Однозубка озимого часнику',c:'single',t:'single',p:220,u:'кг',s:[1,5],d:'Дає повноцінну головку після посадки.'},
- {id:6,n:'Бульбочки часнику (повітряні)',c:'bulbil',t:'bulbil',p:300,u:'кг',s:[1,5],hit:1,d:'Для вирощування однозубки та оновлення сорту.'},
- {id:7,n:'Секатор садовий',c:'tools',t:'sec',p:250,u:'шт',s:[1],d:'Наша робота. Для городу та саду.'},
- {id:8,n:'Сапа плоска',c:'tools',t:'hoe',p:300,u:'шт',s:[1],d:'Наша робота. Плоский ніж на довгій ручці.'}
+ {id:1,n:'Часник «Любаша», головки',c:'heads',img:'lyubasha-golovky.svg',p:150,u:'кг',s:[1,5],hit:1,d:'Великий озимий часник для кухні та зберігання.'},
+ {id:2,n:'Часник «Софіївський», головки',c:'heads',img:'sofiyivskyi-golovky.svg',p:140,u:'кг',s:[1,5],d:'Гострий смак, щільні головки, добре зберігається.'},
+ {id:3,n:'Часник «Прометей», зубки на посадку',c:'cloves',img:'prometey-zubky.svg',p:180,u:'кг',s:[1,5],hit:1,d:'Відбірні зубки одного розміру. Садять восени.'},
+ {id:4,n:'Часник «Любаша», зубки на посадку',c:'cloves',img:'lyubasha-zubky.svg',p:190,u:'кг',s:[1,5],d:'Великі зубки з нашого поля.'},
+ {id:5,n:'Однозубка озимого часнику',c:'single',img:'odnozubka.svg',p:220,u:'кг',s:[1,5],d:'Дає повноцінну головку після посадки.'},
+ {id:6,n:'Бульбочки часнику (повітряні)',c:'bulbil',img:'bulbochky.svg',p:300,u:'кг',s:[1,5],hit:1,d:'Для вирощування однозубки та оновлення сорту.'},
+ {id:7,n:'Секатор садовий',c:'tools',img:'sekator.svg',p:250,u:'шт',s:[1],d:'Наша робота. Для городу та саду.'},
+ {id:8,n:'Сапа плоска',c:'tools',img:'sapa.svg',p:300,u:'шт',s:[1],d:'Наша робота. Плоский ніж на довгій ручці.'}
 ];
 const C=[['all','Усе'],['heads','Головки'],['cloves','Зубки'],['single','Однозубка'],['bulbil','Бульбочки'],['tools','Інструмент']];
-
-/* Малюнки товарів (замість фото) */
-const S={
-head:'<path d="M112 56c1-16 3-30 8-42 5 12 7 26 8 42z" fill="#D9C7A0"/><path d="M120 52c-40 4-62 34-62 66 0 28 24 40 62 40s62-12 62-40c0-32-22-62-62-66z" fill="#FBF6FB" stroke="#7B4A80" stroke-width="3"/><path d="M120 54c-18 24-24 54-22 100M120 54c18 24 24 54 22 100M120 54v104" fill="none" stroke="#7B4A80" stroke-width="2" opacity=".5"/>',
-cloves:'<g fill="#FBF6FB" stroke="#7B4A80" stroke-width="3"><path id="z" d="M80 40C72 56 62 68 64 84c2 14 10 18 16 18s14-4 16-18C98 68 88 56 80 40z"/><use href="#z" x="40" y="-6"/><use href="#z" x="82" y="10"/><use href="#z" x="-6" y="38"/><use href="#z" x="44" y="40"/></g>',
-single:'<path d="M114 66c1-12 2-22 6-32 4 10 5 20 6 32z" fill="#D9C7A0"/><ellipse cx="120" cy="108" rx="46" ry="40" fill="#FBF6FB" stroke="#7B4A80" stroke-width="3"/><path d="M120 68c-14 20-16 56 0 80M120 68c14 20 16 56 0 80" fill="none" stroke="#7B4A80" stroke-width="2" opacity=".5"/>',
-bulbil:'<path d="M120 168C116 120 126 84 120 58" fill="none" stroke="#4F8A2B" stroke-width="5"/><g fill="#F1E6F2" stroke="#7B4A80" stroke-width="2"><circle cx="108" cy="44" r="9"/><circle cx="132" cy="44" r="9"/><circle cx="120" cy="32" r="9"/><circle cx="120" cy="52" r="9"/><circle cx="98" cy="58" r="8"/><circle cx="142" cy="58" r="8"/><circle cx="60" cy="150" r="7"/><circle cx="76" cy="158" r="7"/><circle cx="176" cy="152" r="7"/><circle cx="192" cy="144" r="7"/></g>',
-sec:'<path d="M92 80L190 38C198 35 206 42 200 50L110 98z" fill="#B9C2CA" stroke="#6C757D" stroke-width="2"/><path d="M96 96L170 90C176 90 178 96 172 100L108 112z" fill="#78818A"/><path d="M92 84L40 142" stroke="#C0392B" stroke-width="14" stroke-linecap="round"/><path d="M104 100L84 152" stroke="#8E2A20" stroke-width="14" stroke-linecap="round"/><circle cx="98" cy="90" r="7" fill="#444"/>',
-hoe:'<path d="M214 24L104 106" stroke="#9B6B3D" stroke-width="9" stroke-linecap="round"/><path d="M104 106L74 120" stroke="#6C757D" stroke-width="5" stroke-linecap="round"/><path d="M30 124L100 112L108 134L38 146z" fill="#B9C2CA" stroke="#6C757D" stroke-width="2"/>'
-};
-const img=(t,n)=>`<svg viewBox="0 0 240 170" role="img" aria-label="${n}"><rect width="240" height="170" fill="${t==='sec'||t==='hoe'?'#E4E8E0':'#EDE3EE'}"/>${S[t]}</svg>`;
 
 const fmtW=(w,u)=>u==='шт'?'1 шт':w+' кг';
 let cat='all',query='',cart={};
@@ -205,7 +202,7 @@ function renderCats(){
 function renderGrid(){
   const list=P.filter(x=>(cat==='all'||x.c===cat)&&x.n.toLowerCase().includes(query));
   $('grid').innerHTML=list.length?list.map(x=>`
-  <article class="pc"><div class="ph">${x.hit?'<span class="hit">Хіт</span>':''}${img(x.t,x.n)}</div>
+  <article class="pc"><div class="ph">${x.hit?'<span class="hit">Хіт</span>':''}<img src="${IMG+x.img}" alt="${x.n}" width="240" height="170" loading="lazy"></div>
   <div class="pb"><h3>${x.n}</h3><p class="d">${x.d}</p><div class="stock">✓ В наявності</div>
   <div class="pr"><b>${x.p} грн</b><span>за ${x.u}</span></div>
   <div class="row"><select aria-label="Кількість">${x.s.map(w=>`<option value="${w}">${fmtW(w,x.u)}</option>`).join('')}</select>

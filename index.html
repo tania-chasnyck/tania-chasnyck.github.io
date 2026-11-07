@@ -66,6 +66,7 @@ button,select,input{font:inherit;color:inherit}
 .stock{color:var(--buy);font-weight:700;font-size:.9rem}
 .pr b{font-size:1.5rem;font-family:Bitter,serif}
 .pr span{color:var(--muted);margin-left:4px}
+.opts select{width:100%;border:1px solid var(--line);border-radius:8px;background:var(--bg);padding:8px}
 .row{display:flex;gap:8px}
 .row select{flex:0 0 38%;border:1px solid var(--line);border-radius:8px;background:var(--bg);padding:8px}
 .add{flex:1;border:0;border-radius:8px;background:var(--buy);color:var(--buy-ink);font-weight:700;cursor:pointer;padding:10px}
@@ -112,7 +113,7 @@ footer{padding:24px 0;text-align:center;color:var(--muted);font-size:.92rem}
 
 <header class="wrap bar">
   <a class="logo" href="#">Часник з городу</a>
-  <input class="search" id="q" type="search" placeholder="Пошук: сорт, зубки, секатор" aria-label="Пошук по товарах">
+  <input class="search" id="q" type="search" placeholder="Пошук: зубки, бульбочки, сапа" aria-label="Пошук по товарах">
   <button class="cartbtn" id="open" type="button">Кошик<b id="cnt">0</b></button>
 </header>
 
@@ -121,7 +122,7 @@ footer{padding:24px 0;text-align:center;color:var(--muted);font-size:.92rem}
 <main class="wrap">
   <div class="banner">
     <h1>Свій часник з Черкащини</h1>
-    <p>Виростили самі, без перекупників. Головки на їжу, зубки, однозубка та повітряні бульбочки на посадку. Секатори й сапи теж робимо самі.</p>
+    <p>Виростили самі, без перекупників. Зубки, однозубка та повітряні бульбочки сорту «Любаша» на посадку, а також чищений зубок. Секатори й сапи теж робимо самі.</p>
   </div>
   <div class="grid" id="grid" aria-live="polite"></div>
 
@@ -174,27 +175,56 @@ const TG='ids_game';
 /* Папка з картинками (лежить поруч з index.html) */
 const IMG='images/';
 
-/* Товари: змінюйте назви, ціни та описи тут.
-   img: файл картинки товару в папці images (щоб замінити на фото, завантажте
-        фото в папку images і впишіть його назву, наприклад img:'lyubasha.jpg')
-   p: ціна за кг або за штуку, u: одиниця, s: варіанти ваги (від 1 кг) */
+/* Товари: кожен рядок — окрема позиція. Змінюйте назви, ціни та описи тут.
+   n: назва, p: ціна, u: одиниця ('кг' або 'шт')
+   s: варіанти ваги для кг, наприклад [1,5] (для шт залишайте [1])
+   img: файл картинки в папці images (щоб замінити на фото, завантажте фото
+        в папку images і впишіть його назву, наприклад img:'zubky-3.jpg')
+   hit:1 — показати бейдж «Хіт» */
 const P=[
- {id:1,n:'Часник «Любаша», головки',c:'heads',img:'lyubasha-golovky.svg',p:150,u:'кг',s:[1,5],hit:1,d:'Великий озимий часник для кухні та зберігання.'},
- {id:2,n:'Часник «Софіївський», головки',c:'heads',img:'sofiyivskyi-golovky.svg',p:140,u:'кг',s:[1,5],d:'Гострий смак, щільні головки, добре зберігається.'},
- {id:3,n:'Часник «Прометей», зубки на посадку',c:'cloves',img:'prometey-zubky.svg',p:180,u:'кг',s:[1,5],hit:1,d:'Відбірні зубки одного розміру. Садять восени.'},
- {id:4,n:'Часник «Любаша», зубки на посадку',c:'cloves',img:'lyubasha-zubky.svg',p:190,u:'кг',s:[1,5],d:'Великі зубки з нашого поля.'},
- {id:5,n:'Однозубка озимого часнику',c:'single',img:'odnozubka.svg',p:220,u:'кг',s:[1,5],d:'Дає повноцінну головку після посадки.'},
- {id:6,n:'Бульбочки часнику (повітряні)',c:'bulbil',img:'bulbochky.svg',p:300,u:'кг',s:[1,5],hit:1,d:'Для вирощування однозубки та оновлення сорту.'},
- {id:7,n:'Секатор садовий',c:'tools',img:'sekator.svg',p:250,u:'шт',s:[1],d:'Наша робота. Для городу та саду.'},
- {id:8,n:'Сапа плоска',c:'tools',img:'sapa.svg',p:300,u:'шт',s:[1],d:'Наша робота. Плоский ніж на довгій ручці.'}
+ /* Зубки, 1-ша репродукція */
+ {id:1,n:'Часник «Любаша», зубки, 1-ша репродукція — фракція 3+',c:'cloves',img:'lyubasha-zubky.svg',p:130,u:'кг',s:[1,5],hit:1,d:'Зубки на посадку сорту «Любаша».'},
+ {id:2,n:'Часник «Любаша», зубки, 1-ша репродукція — фракція 4+',c:'cloves',img:'lyubasha-zubky.svg',p:140,u:'кг',s:[1,5],d:'Зубки на посадку сорту «Любаша».'},
+ {id:3,n:'Часник «Любаша», зубки, 1-ша репродукція — фракція 5+',c:'cloves',img:'lyubasha-zubky.svg',p:150,u:'кг',s:[1,5],d:'Зубки на посадку сорту «Любаша».'},
+ {id:4,n:'Часник «Любаша», зубки, 1-ша репродукція — фракція 6+',c:'cloves',img:'lyubasha-zubky.svg',p:160,u:'кг',s:[1,5],d:'Зубки на посадку сорту «Любаша».'},
+ {id:5,n:'Часник «Любаша», зубки, 1-ша репродукція — фракція 7+',c:'cloves',img:'lyubasha-zubky.svg',p:170,u:'кг',s:[1,5],d:'Зубки на посадку сорту «Любаша».'},
+ /* Зубки, 2-га репродукція */
+ {id:6,n:'Часник «Любаша», зубки, 2-га репродукція — фракція 3+',c:'cloves',img:'lyubasha-zubky-2.svg',p:120,u:'кг',s:[1,5],d:'Зубки на посадку сорту «Любаша».'},
+ {id:7,n:'Часник «Любаша», зубки, 2-га репродукція — фракція 4+',c:'cloves',img:'lyubasha-zubky-2.svg',p:130,u:'кг',s:[1,5],d:'Зубки на посадку сорту «Любаша».'},
+ {id:8,n:'Часник «Любаша», зубки, 2-га репродукція — фракція 5+',c:'cloves',img:'lyubasha-zubky-2.svg',p:140,u:'кг',s:[1,5],d:'Зубки на посадку сорту «Любаша».'},
+ {id:9,n:'Часник «Любаша», зубки, 2-га репродукція — фракція 6+',c:'cloves',img:'lyubasha-zubky-2.svg',p:150,u:'кг',s:[1,5],d:'Зубки на посадку сорту «Любаша».'},
+ {id:10,n:'Часник «Любаша», зубки, 2-га репродукція — фракція 7+',c:'cloves',img:'lyubasha-zubky-2.svg',p:160,u:'кг',s:[1,5],d:'Зубки на посадку сорту «Любаша».'},
+ /* Бульбочки (воздушка) */
+ {id:11,n:'Бульбочки часнику «Любаша» — 2–3 мм',c:'bulbil',img:'bulbochky.svg',p:100,u:'кг',s:[1,5],d:'Повітряні бульбочки на посадку.'},
+ {id:12,n:'Бульбочки часнику «Любаша» — 3–4 мм',c:'bulbil',img:'bulbochky.svg',p:120,u:'кг',s:[1,5],d:'Повітряні бульбочки на посадку.'},
+ {id:13,n:'Бульбочки часнику «Любаша» — 4–5 мм',c:'bulbil',img:'bulbochky.svg',p:150,u:'кг',s:[1,5],d:'Повітряні бульбочки на посадку.'},
+ {id:14,n:'Бульбочки часнику «Любаша» — 5–6 мм',c:'bulbil',img:'bulbochky.svg',p:200,u:'кг',s:[1,5],d:'Повітряні бульбочки на посадку.'},
+ {id:15,n:'Бульбочки часнику «Любаша» — 6–7 мм',c:'bulbil',img:'bulbochky.svg',p:250,u:'кг',s:[1,5],d:'Повітряні бульбочки на посадку.'},
+ {id:16,n:'Бульбочки часнику «Любаша» — 7–8 мм',c:'bulbil',img:'bulbochky.svg',p:300,u:'кг',s:[1,5],d:'Повітряні бульбочки на посадку.'},
+ {id:17,n:'Бульбочки часнику «Любаша» — 8+ мм',c:'bulbil',img:'bulbochky.svg',p:400,u:'кг',s:[1,5],d:'Повітряні бульбочки на посадку.'},
+ /* Однозубка */
+ {id:18,n:'Однозубка часнику «Любаша» — 12–15 мм',c:'single',img:'odnozubka.svg',p:150,u:'кг',s:[1,5],d:'Однозубка на посадку.'},
+ {id:19,n:'Однозубка часнику «Любаша» — 15–18 мм',c:'single',img:'odnozubka.svg',p:200,u:'кг',s:[1,5],d:'Однозубка на посадку.'},
+ {id:20,n:'Однозубка часнику «Любаша» — 18–22 мм',c:'single',img:'odnozubka.svg',p:250,u:'кг',s:[1,5],d:'Однозубка на посадку.'},
+ {id:21,n:'Однозубка часнику «Любаша» — 22+ мм',c:'single',img:'odnozubka.svg',p:300,u:'кг',s:[1,5],d:'Однозубка на посадку.'},
+ /* Чищений зубок */
+ {id:22,n:'Чищений зубок часнику',c:'peeled',img:'chystyi-zubok.svg',p:130,u:'кг',s:[1,5],d:'Чищений зубок часнику.'},
+ /* Секатор і запчастини */
+ {id:23,n:'Секатор',c:'tools',img:'sekator.svg',p:350,u:'шт',s:[1],d:'Наша робота. Для городу та саду.'},
+ {id:24,n:'Пружинка до секатора',c:'tools',img:'pruzhynka.svg',p:50,u:'шт',s:[1],d:'Запасна пружинка до секатора.'},
+ /* Сапи */
+ {id:25,n:'Сапа 12 см',c:'tools',img:'sapa.svg',p:280,u:'шт',s:[1],d:'Наша робота. Плоский ніж на довгій ручці.'},
+ {id:26,n:'Сапа 15 см',c:'tools',img:'sapa.svg',p:300,u:'шт',s:[1],d:'Наша робота. Плоский ніж на довгій ручці.'},
+ {id:27,n:'Сапа 18 см',c:'tools',img:'sapa.svg',p:350,u:'шт',s:[1],d:'Наша робота. Плоский ніж на довгій ручці.'},
+ {id:28,n:'Сапа 20 см',c:'tools',img:'sapa.svg',p:370,u:'шт',s:[1],d:'Наша робота. Плоский ніж на довгій ручці.'}
 ];
-const C=[['all','Усе'],['heads','Головки'],['cloves','Зубки'],['single','Однозубка'],['bulbil','Бульбочки'],['tools','Інструмент']];
+const C=[['all','Усе'],['cloves','Зубки'],['bulbil','Бульбочки'],['single','Однозубка'],['peeled','Чищений'],['tools','Інструмент']];
 
 const fmtW=(w,u)=>u==='шт'?'1 шт':w+' кг';
 let cat='all',query='',cart={};
-try{cart=JSON.parse(localStorage.getItem('cart')||'{}')}catch(e){cart={}}
+try{cart=JSON.parse(localStorage.getItem('cart3')||'{}')}catch(e){cart={}}
 const $=id=>document.getElementById(id);
-const save=()=>{try{localStorage.setItem('cart',JSON.stringify(cart))}catch(e){}};
+const save=()=>{try{localStorage.setItem('cart3',JSON.stringify(cart))}catch(e){}};
 
 function renderCats(){
   $('cats').innerHTML=C.map(([k,l])=>`<button type="button" data-c="${k}" aria-pressed="${k===cat}">${l}</button>`).join('');
@@ -205,20 +235,20 @@ function renderGrid(){
   <article class="pc"><div class="ph">${x.hit?'<span class="hit">Хіт</span>':''}<img src="${IMG+x.img}" alt="${x.n}" width="240" height="170" loading="lazy"></div>
   <div class="pb"><h3>${x.n}</h3><p class="d">${x.d}</p><div class="stock">✓ В наявності</div>
   <div class="pr"><b>${x.p} грн</b><span>за ${x.u}</span></div>
-  <div class="row"><select aria-label="Кількість">${x.s.map(w=>`<option value="${w}">${fmtW(w,x.u)}</option>`).join('')}</select>
+  <div class="row">${x.u==='кг'?`<select class="sw" aria-label="Вага">${x.s.map(w=>`<option value="${w}">${fmtW(w,x.u)}</option>`).join('')}</select>`:''}
   <button class="add" type="button" data-id="${x.id}">У кошик</button></div></div></article>`).join('')
   :'<p class="empty">Нічого не знайшли. Спробуйте інший запит.</p>';
 }
 function lines(){
   return Object.entries(cart).map(([k,q])=>{
     const [id,w]=k.split('|');const x=P.find(p=>p.id==id);
-    return x?{k,q,x,w:+w,sum:Math.round(x.p*(+w)*q)}:null;
+    return x?{k,q,x,w:+w,price:x.p,sum:Math.round(x.p*(+w)*q)}:null;
   }).filter(Boolean);
 }
 function renderCart(){
   const L=lines();const total=L.reduce((a,l)=>a+l.sum,0);
   $('cnt').textContent=L.reduce((a,l)=>a+l.q,0);
-  $('items').innerHTML=L.length?L.map(l=>`<div class="it"><div><b>${l.x.n}</b><br><small>${fmtW(l.w,l.x.u)}, ${l.x.p} грн за ${l.x.u}</small></div><b>${l.sum} грн</b>
+  $('items').innerHTML=L.length?L.map(l=>`<div class="it"><div><b>${l.x.n}</b><br><small>${fmtW(l.w,l.x.u)}, ${l.price} грн за ${l.x.u}</small></div><b>${l.sum} грн</b>
   <div><button type="button" data-m="${l.k}" aria-label="Менше">−</button>${l.q}<button type="button" data-p="${l.k}" aria-label="Більше" style="margin-left:4px">+</button></div></div>`).join(''):'<p class="empty">Кошик порожній. Оберіть товар у каталозі.</p>';
   $('sum').textContent=L.length?'Разом: '+total+' грн':'';
   const txt=orderText(L,total);
@@ -234,7 +264,8 @@ document.addEventListener('click',e=>{
   const t=e.target;
   if(t.dataset.c){cat=t.dataset.c;renderCats();renderGrid()}
   if(t.classList.contains('add')){
-    const w=t.parentNode.querySelector('select').value,k=t.dataset.id+'|'+w;
+    const sw=t.closest('.pc').querySelector('.sw');
+    const k=t.dataset.id+'|'+(sw?sw.value:1);
     cart[k]=(cart[k]||0)+1;save();renderCart();
     t.textContent='Додано ✓';setTimeout(()=>t.textContent='У кошик',1200);
   }

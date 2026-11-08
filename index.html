@@ -82,6 +82,7 @@ button,select,input{font:inherit;color:inherit}
 .items{flex:1;overflow-y:auto}
 .it{display:grid;grid-template-columns:1fr auto;gap:2px 10px;padding:10px 0;border-bottom:1px solid var(--line)}
 .it small{color:var(--muted)}
+.it .tot{font-weight:700;color:var(--buy);font-size:.95rem}
 .it button{border:1px solid var(--line);background:none;border-radius:6px;cursor:pointer;padding:2px 10px;margin-right:4px}
 .sum{font-family:Bitter,serif;font-size:1.3rem;padding:12px 0}
 .go{display:block;text-align:center;text-decoration:none;background:var(--buy);color:var(--buy-ink);font-weight:700;border-radius:10px;padding:12px;margin-bottom:8px}
@@ -221,10 +222,11 @@ const P=[
 const C=[['all','Усе'],['cloves','Зубки'],['bulbil','Бульбочки'],['single','Однозубка'],['peeled','Чищений'],['tools','Інструмент']];
 
 const fmtW=(w,u)=>u==='шт'?'1 шт':w+' кг';
+const qtyTxt=(q,u)=>q+(u==='шт'?' шт':' кг');
 let cat='all',query='',cart={};
-try{cart=JSON.parse(localStorage.getItem('cart3')||'{}')}catch(e){cart={}}
+try{cart=JSON.parse(localStorage.getItem('cart4')||'{}')}catch(e){cart={}}
 const $=id=>document.getElementById(id);
-const save=()=>{try{localStorage.setItem('cart3',JSON.stringify(cart))}catch(e){}};
+const save=()=>{try{localStorage.setItem('cart4',JSON.stringify(cart))}catch(e){}};
 
 function renderCats(){
   $('cats').innerHTML=C.map(([k,l])=>`<button type="button" data-c="${k}" aria-pressed="${k===cat}">${l}</button>`).join('');
@@ -240,23 +242,24 @@ function renderGrid(){
   :'<p class="empty">Нічого не знайшли. Спробуйте інший запит.</p>';
 }
 function lines(){
-  return Object.entries(cart).map(([k,q])=>{
-    const [id,w]=k.split('|');const x=P.find(p=>p.id==id);
-    return x?{k,q,x,w:+w,price:x.p,sum:Math.round(x.p*(+w)*q)}:null;
+  /* cart: { id товару: кількість (кг для чесноку, шт для інструменту) } */
+  return Object.entries(cart).map(([id,q])=>{
+    const x=P.find(p=>p.id==id);
+    return x?{k:id,q,x,price:x.p,sum:Math.round(x.p*q)}:null;
   }).filter(Boolean);
 }
 function renderCart(){
   const L=lines();const total=L.reduce((a,l)=>a+l.sum,0);
-  $('cnt').textContent=L.reduce((a,l)=>a+l.q,0);
-  $('items').innerHTML=L.length?L.map(l=>`<div class="it"><div><b>${l.x.n}</b><br><small>${fmtW(l.w,l.x.u)}, ${l.price} грн за ${l.x.u}</small></div><b>${l.sum} грн</b>
-  <div><button type="button" data-m="${l.k}" aria-label="Менше">−</button>${l.q}<button type="button" data-p="${l.k}" aria-label="Більше" style="margin-left:4px">+</button></div></div>`).join(''):'<p class="empty">Кошик порожній. Оберіть товар у каталозі.</p>';
+  $('cnt').textContent=L.length; /* кількість позицій, а не кг */
+  $('items').innerHTML=L.length?L.map(l=>`<div class="it"><div><b>${l.x.n}</b><br><small>${l.price} грн за ${l.x.u}</small><br><span class="tot">${qtyTxt(l.q,l.x.u)} = ${l.sum} грн</span></div><b>${l.sum} грн</b>
+  <div><button type="button" data-m="${l.k}" aria-label="Менше">−</button><b>${qtyTxt(l.q,l.x.u)}</b><button type="button" data-p="${l.k}" aria-label="Більше" style="margin-left:4px">+</button></div></div>`).join(''):'<p class="empty">Кошик порожній. Оберіть товар у каталозі.</p>';
   $('sum').textContent=L.length?'Разом: '+total+' грн':'';
   const txt=orderText(L,total);
   $('tg').href='https://t.me/'+TG+'?text='+encodeURIComponent(txt);
   $('tg').style.display=$('copy').style.display=L.length?'':'none';
 }
 function orderText(L,total){
-  return 'Вітаю! Хочу замовити:\n'+L.map(l=>`- ${l.x.n}, ${fmtW(l.w,l.x.u)} × ${l.q} = ${l.sum} грн`).join('\n')+'\nРазом: '+total+' грн';
+  return 'Вітаю! Хочу замовити:\n'+L.map(l=>`- ${l.x.n}, ${qtyTxt(l.q,l.x.u)} × ${l.price} грн = ${l.sum} грн`).join('\n')+'\nРазом: '+total+' грн';
 }
 const open=on=>{$('drawer').classList.toggle('on',on);$('shade').classList.toggle('on',on)};
 
@@ -265,8 +268,8 @@ document.addEventListener('click',e=>{
   if(t.dataset.c){cat=t.dataset.c;renderCats();renderGrid()}
   if(t.classList.contains('add')){
     const sw=t.closest('.pc').querySelector('.sw');
-    const k=t.dataset.id+'|'+(sw?sw.value:1);
-    cart[k]=(cart[k]||0)+1;save();renderCart();
+    const k=t.dataset.id;
+    cart[k]=(cart[k]||0)+(sw?+sw.value:1);save();renderCart();
     t.textContent='Додано ✓';setTimeout(()=>t.textContent='У кошик',1200);
   }
   if(t.dataset.p){cart[t.dataset.p]++;save();renderCart()}

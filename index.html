@@ -64,12 +64,15 @@ button,select,input{font:inherit;color:inherit}
 .pb h3{font-size:1.05rem}
 .d{margin:0;color:var(--muted);font-size:.92rem;flex:1}
 .stock{color:var(--buy);font-weight:700;font-size:.9rem}
+.stock.out{color:#B3261E}
+.stock.few{color:#B26A00}
 .pr b{font-size:1.5rem;font-family:Bitter,serif}
 .pr span{color:var(--muted);margin-left:4px}
 .opts select{width:100%;border:1px solid var(--line);border-radius:8px;background:var(--bg);padding:8px}
 .row{display:flex;gap:8px}
 .row select{flex:0 0 38%;border:1px solid var(--line);border-radius:8px;background:var(--bg);padding:8px}
 .add{flex:1;border:0;border-radius:8px;background:var(--buy);color:var(--buy-ink);font-weight:700;cursor:pointer;padding:10px}
+.add:disabled{background:var(--line);color:var(--muted);cursor:not-allowed}
 .empty{padding:40px 0;color:var(--muted)}
 
 /* Кошик */
@@ -183,7 +186,10 @@ const IMG='images/';
    s: варіанти ваги для кг, наприклад [1,5] (для шт залишайте [1])
    img: файл картинки в папці images (щоб замінити на фото, завантажте фото
         в папку images і впишіть його назву, наприклад img:'zubky-3.jpg')
-   hit:1 — показати бейдж «Хіт» */
+   hit:1 — показати бейдж «Хіт»
+   st: статус товару (необов'язково): 'out' — Немає в наявності,
+       'few' — Закінчується, 'order' — Під замовлення.
+       Додайте перед d:, наприклад s:[1,5],st:'out',d:'...' */
 const P=[
  /* Зубки, 1-ша репродукція */
  {id:1,n:'Часник «Любаша», зубки, 1-ша репродукція — фракція 3+',c:'cloves',img:'lyubasha-zubky.jpg',p:130,u:'кг',s:[1,5],hit:1,d:'Зубки на посадку сорту «Любаша».'},
@@ -223,6 +229,9 @@ const P=[
 ];
 const C=[['all','Усе'],['cloves','Зубки'],['bulbil','Бульбочки'],['single','Однозубка'],['peeled','Чищений'],['tools','Інструмент']];
 
+/* Статуси товару: впишіть у рядок товару st:'out' (немає), st:'few' (закінчується), st:'order' (під замовлення). Без st — «В наявності». */
+const ST={in:['✓ В наявності',''],few:['● Закінчується','few'],order:['◷ Під замовлення','few'],out:['✗ Немає в наявності','out']};
+const isOut=x=>x.st==='out'||x.out;
 const fmtW=(w,u)=>u==='шт'?'1 шт':w+' кг';
 const qtyTxt=(q,u)=>q+(u==='шт'?' шт':' кг');
 let cat='all',query='',cart={};
@@ -237,17 +246,17 @@ function renderGrid(){
   const list=P.filter(x=>(cat==='all'||x.c===cat)&&x.n.toLowerCase().includes(query));
   $('grid').innerHTML=list.length?list.map(x=>`
   <article class="pc"><div class="ph">${x.hit?'<span class="hit">Хіт</span>':''}<img src="${IMG+x.img}" alt="${x.n}" width="240" height="170" loading="lazy"></div>
-  <div class="pb"><h3>${x.n}</h3><p class="d">${x.d}</p><div class="stock">✓ В наявності</div>
+  <div class="pb"><h3>${x.n}</h3><p class="d">${x.d}</p><div class="stock ${ST[x.st||'in'][1]}">${ST[x.st||'in'][0]}</div>
   <div class="pr"><b>${x.p} грн</b><span>за ${x.u}</span></div>
-  <div class="row">${x.u==='кг'?`<select class="sw" aria-label="Вага">${x.s.map(w=>`<option value="${w}">${fmtW(w,x.u)}</option>`).join('')}</select>`:''}
-  <button class="add" type="button" data-id="${x.id}">У кошик</button></div></div></article>`).join('')
+  <div class="row">${x.u==='кг'&&!isOut(x)?`<select class="sw" aria-label="Вага">${x.s.map(w=>`<option value="${w}">${fmtW(w,x.u)}</option>`).join('')}</select>`:''}
+  <button class="add" type="button" data-id="${x.id}"${isOut(x)?' disabled':''}>${isOut(x)?'Немає в наявності':'У кошик'}</button></div></div></article>`).join('')
   :'<p class="empty">Нічого не знайшли. Спробуйте інший запит.</p>';
 }
 function lines(){
   /* cart: { id товару: кількість (кг для чесноку, шт для інструменту) } */
   return Object.entries(cart).map(([id,q])=>{
     const x=P.find(p=>p.id==id);
-    return x?{k:id,q,x,price:x.p,sum:Math.round(x.p*q)}:null;
+    return x&&!isOut(x)?{k:id,q,x,price:x.p,sum:Math.round(x.p*q)}:null;
   }).filter(Boolean);
 }
 function renderCart(){

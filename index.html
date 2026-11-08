@@ -159,6 +159,7 @@ footer{padding:24px 0;text-align:center;color:var(--muted);font-size:.92rem}
         <!-- Картинка: папка images, файл sklad.svg -->
         <a href="https://www.tiktok.com/@chasnik5/photo/7675067209584037141" target="_blank" rel="noopener">
   <img src="images/qwer2.jpg" alt="Поле з часником" width="600" height="240" loading="lazy">
+          </a>
         <figcaption>Склад часнику.</figcaption>
       </figure>
     </div>
@@ -258,7 +259,7 @@ function renderCats(){
   $('cats').innerHTML=C.map(([k,l])=>`<button type="button" data-c="${k}" aria-pressed="${k===cat}">${l}</button>`).join('');
 }
 function renderGrid(){
-  const list=P.filter(x=>(cat==='all'||x.c===cat)&&x.n.toLowerCase().includes(query));
+  const list=P.filter(x=>(cat==='all'||x.c===cat)&&x.n.toLowerCase().includes(query)).sort((a,b)=>(isOut(a)?1:0)-(isOut(b)?1:0));
   $('grid').innerHTML=list.length?list.map(x=>`
   <article class="pc"><div class="ph">${x.hit?'<span class="hit">Хіт</span>':''}<img src="${IMG+x.img}" alt="${x.n}" width="240" height="170" loading="lazy"></div>
   <div class="pb"><h3>${x.n}</h3><p class="d">${x.d}</p><div class="stock ${ST[x.st||'in'][1]}">${ST[x.st||'in'][0]}</div>

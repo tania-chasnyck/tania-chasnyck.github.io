@@ -5,28 +5,28 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   
-  <!-- Идеальный заголовок для Google поиска -->
+  <!-- Заголовок для пошуку Google -->
   <title>Таня Часник — Офіційний сайт: Сапи, секатори, часник Любаша (chasnik5)</title>
   
-  <!-- Описание страницы с главными поисковыми фразами -->
+  <!-- Опис сторінки з головними пошуковими фразами -->
   <meta name="description" content="Офіційний інтернет-магазин блогера Таня Часник (chasnik5). Купити фірмові сапи, секатори для чистки часнику та цибулі, а також посадковий часник Любаша напряму з Черкащини.">
   
   <link rel="canonical" href="https://tania-chasnyck.github.io/">
   
-  <!-- Теги для красивого отображения ссылки в Viber, Telegram и Facebook -->
+  <!-- Теги для гарного відображення посилання у Viber, Telegram та Facebook -->
   <meta property="og:title" content="Таня Часник (chasnik5) — Офіційний сайт інструментів та часнику">
   <meta property="og:description" content="Замовляйте фірмові сапи, секатори для чистки та посадковий часник сорту Любаша безпосередньо у Тані Часник з Черкащини.">
   <meta property="og:url" content="https://tania-chasnyck.github.io/">
   <meta property="og:type" content="website">
   <meta property="og:image" content="https://tania-chasnyck.github.io/images/sekators.png">
   
-  <!-- Иконки и шрифты -->
+  <!-- Іконки та шрифти -->
   <link rel="icon" type="image/png" sizes="48x48" href="favicon.png">
   <link rel="icon" type="image/png" sizes="192x192" href="favicon-192.png">
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
   
-  <!-- Микроразметка, связывающая сайт с её TikTok -->
+  <!-- Мікророзмітка, що пов'язує сайт з її TikTok -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -143,6 +143,42 @@ figcaption{color:var(--muted);font-size:.92rem;margin-top:6px}
 footer{padding:24px 0;text-align:center;color:var(--muted);font-size:.92rem}
 @media (max-width:560px){.logo{font-size:1.05rem}.grid{grid-template-columns:repeat(2,1fr);gap:10px}.pb{padding:10px}.row{flex-direction:column}.row select{flex:none}}
 @media (prefers-reduced-motion:reduce){.drawer{transition:none}}
+
+/* ===== Оформлення (кольорова шапка, картки, кнопка Telegram) ===== */
+html{scroll-behavior:smooth}
+header.bar{position:sticky;top:0;z-index:15;background:var(--bg);max-width:none;padding-left:max(16px,calc((100% - 1160px)/2 + 16px));padding-right:max(16px,calc((100% - 1160px)/2 + 16px));box-shadow:0 1px 0 var(--line)}
+.banner{position:relative;overflow:hidden;border:0;padding:30px 28px;background:linear-gradient(135deg,#5B2C5E 0%,#7B4A80 55%,#3F6B1E 135%)}
+.banner h1{color:#fff}
+.banner p{color:rgba(255,255,255,.92);max-width:62ch}
+.banner::after{content:"🧄";position:absolute;right:18px;bottom:-14px;font-size:120px;line-height:1;opacity:.15;pointer-events:none}
+.hero-cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.btn-w,.btn-o{display:inline-block;padding:10px 18px;border-radius:10px;font-weight:700;text-decoration:none}
+.btn-w{background:#fff;color:#5B2C5E}
+.btn-o{border:2px solid rgba(255,255,255,.85);color:#fff}
+.btn-w:hover,.btn-o:hover{filter:brightness(.95)}
+.badges{list-style:none;padding:0;margin:16px 0 0;display:flex;gap:8px;flex-wrap:wrap}
+.badges li{background:rgba(255,255,255,.16);border-radius:20px;padding:4px 12px;font-size:.88rem;color:#fff}
+.pc{box-shadow:0 1px 2px rgba(42,31,38,.06),0 6px 18px rgba(42,31,38,.05);transition:transform .2s,box-shadow .2s}
+.pc:hover{transform:translateY(-3px);box-shadow:0 2px 4px rgba(42,31,38,.08),0 14px 30px rgba(42,31,38,.12)}
+.ph{overflow:hidden}
+.ph img{transition:transform .35s}
+.pc:hover .ph img{transform:scale(1.05)}
+.pc.na{opacity:.62}
+.pc.na:hover{transform:none}
+.pc.na:hover .ph img{transform:none}
+.pc.na .ph img{filter:grayscale(.85)}
+.pr b{color:var(--brand)}
+.add:not(:disabled):hover{filter:brightness(1.1)}
+.add:not(:disabled):active{transform:scale(.97)}
+.cats button:hover{border-color:var(--brand)}
+.info h2::after{content:"";display:block;width:56px;height:4px;border-radius:4px;background:var(--buy);margin-top:8px}
+figure img{box-shadow:0 8px 24px rgba(42,31,38,.15)}
+.ct{background:linear-gradient(135deg,#5B2C5E,#7B4A80);color:#fff}
+.ct a{color:#fff}
+footer{background:#2A1F26;color:#d9ccd7;padding:28px 16px;margin-top:40px}
+.fab{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:15;background:#229ED9;color:#fff;font-weight:700;text-decoration:none;padding:12px 18px;border-radius:30px;box-shadow:0 6px 18px rgba(0,0,0,.25)}
+@media (max-width:560px){.banner{padding:22px 18px}.banner::after{font-size:90px}.fab{padding:11px 15px}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.pc,.ph img{transition:none}}
 </style>
 </head>
 <body>
@@ -164,6 +200,15 @@ footer{padding:24px 0;text-align:center;color:var(--muted);font-size:.92rem}
   <div class="banner">
     <h1>Офіційний сайт Тані Часник (chasnik5) — Часник та інструменти з Черкащини</h1>
     <p>Виростили самі, без перекупників. Зубки, однозубка та повітряні бульбочки сорту «Любаша» на посадку, а також чищений зубок. Секатори й сапи теж робимо самі.</p>
+    <div class="hero-cta">
+      <a class="btn-w" href="#grid">Дивитися каталог</a>
+      <a class="btn-o" id="heroTg" href="#" target="_blank" rel="noopener">Написати в Telegram</a>
+    </div>
+    <ul class="badges">
+      <li>🚚 Відправляємо по Україні</li>
+      <li>🌱 Своє господарство, Черкащина</li>
+      <li>🛠 Сапи й секатори власного виробництва</li>
+    </ul>
   </div>
   <div class="grid" id="grid" aria-live="polite"></div>
 
@@ -172,14 +217,14 @@ footer{padding:24px 0;text-align:center;color:var(--muted);font-size:.92rem}
     <p>Вирощуємо озимий часник на Черкащині, викопуємо вручну та сушимо в тіні. Перед відправкою перебираємо кожну партію.</p>
     <div class="two">
       <figure>
-        <!-- Картинка: папка images, файл pole.svg (можна замінити на pole.jpg і змінити назву тут) -->
+        <!-- Картинка: папка images, файл qwer.jpg -->
         <a href="https://www.tiktok.com/@chasnik5/video/7692828373529201940" target="_blank" rel="noopener">
   <img src="images/qwer.jpg" alt="Поле з часником" width="600" height="240" loading="lazy">
 </a>
         <figcaption>Наше поле з озимим часником.</figcaption>
       </figure>
       <figure>
-        <!-- Картинка: папка images, файл sklad.svg -->
+        <!-- Картинка: папка images, файл qwer2.jpg -->
         <a href="https://www.tiktok.com/@chasnik5/photo/7675067209584037141" target="_blank" rel="noopener">
   <img src="images/qwer2.jpg" alt="Склад часнику" width="600" height="240" loading="lazy">
           </a>
@@ -201,6 +246,8 @@ footer{padding:24px 0;text-align:center;color:var(--muted);font-size:.92rem}
   </section>
 </main>
 <footer>© 2026 Часник з городу, Черкащина</footer>
+
+<a class="fab" id="fab" href="#" target="_blank" rel="noopener">✈ Написати в Telegram</a>
 
 <div class="shade" id="shade"></div>
 <aside class="drawer" id="drawer" aria-label="Кошик">
@@ -283,7 +330,7 @@ function renderCats(){
 function renderGrid(){
   const list=P.filter(x=>(cat==='all'||x.c===cat)&&x.n.toLowerCase().includes(query)).sort((a,b)=>(isOut(a)?1:0)-(isOut(b)?1:0));
   $('grid').innerHTML=list.length?list.map(x=>`
-  <article class="pc"><div class="ph">${x.hit?'<span class="hit">Хіт</span>':''}<img src="${IMG+x.img}" alt="${x.n}" width="240" height="170" loading="lazy"></div>
+  <article class="pc${isOut(x)?' na':''}"><div class="ph">${x.hit&&!isOut(x)?'<span class="hit">Хіт</span>':''}<img src="${IMG+x.img}" alt="${x.n}" width="240" height="170" loading="lazy"></div>
   <div class="pb"><h3>${x.n}</h3><p class="d">${x.d}</p><div class="stock ${ST[x.st||'in'][1]}">${ST[x.st||'in'][0]}</div>
   <div class="pr"><b>${x.p} грн</b><span>за ${x.u}</span></div>
   <div class="row">${x.u==='кг'&&!isOut(x)?`<select class="sw" aria-label="Вага">${x.s.map(w=>`<option value="${w}">${fmtW(w,x.u)}</option>`).join('')}</select>`:''}
@@ -333,6 +380,7 @@ $('copy').onclick=async()=>{
   try{await navigator.clipboard.writeText(txt);$('hint').textContent='Замовлення скопійовано. Вставте його в месенджер.'}
   catch(e){$('hint').textContent='Не вдалося скопіювати. Виділіть текст замовлення вручну.'}
 };
+$('fab').href=$('heroTg').href='https://t.me/'+TG;
 renderCats();renderGrid();renderCart();
 </script>
 </body>
